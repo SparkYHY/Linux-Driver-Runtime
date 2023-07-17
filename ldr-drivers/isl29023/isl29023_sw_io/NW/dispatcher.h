@@ -1,0 +1,12 @@
+#ifndef _ISL29023_DISPATCHER_H_
+#define _ISL29023_DISPATCHER_H_
+
+#define MAX_PARAM_BUF_SIZE	256
+
+#define ISL29023_DRIVER_ID	11
+
+enum isl29023_func {
+	ISL29023_PROBE,
+};
+
+#endif

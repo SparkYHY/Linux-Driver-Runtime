@@ -1,0 +1,364 @@
+// SPDX-License-Identifier: GPL-2.0+
+/*
+ * Copyright 2019 NXP
+ */
+
+#include "imx8mn-sec-def.h"
+
+/ {
+	binman: binman {
+		multiple-images;
+	};
+
+	wdt-reboot {
+		compatible = "wdt-reboot";
+		wdt = <&wdog1>;
+		u-boot,dm-spl;
+	};
+
+	aliases {
+		usbgadget0 = &usbg1;
+	};
+
+	usbg1: usbg1 {
+		compatible = "fsl,imx27-usb-gadget";
+		dr_mode = "peripheral";
+		chipidea,usb = <&usbotg1>;
+		status = "okay";
+	};
+
+	firmware {
+		optee {
+			compatible = "linaro,optee-tz";
+			method = "smc";
+		};
+	};
+	mcu_rdc {
+		compatible = "imx8m,mcu_rdc";
+			    /* rdc config when MCU starts
+			     * master
+			     *   SDMA3p --> domain 1
+			     *   SDMA3b --> domian 1
+			     *   SDMA3_SPBA2  --> domian 1
+			     * peripheral:
+			     *   SAI3   --> Only Domian 1 can access
+			     *   UART4  --> Only Domian 1 can access
+			     *   GPT1   --> Only Domian 1 can access
+			     * memory:
+			     *   TCM    --> Only Domian 1 can access (0x7E0000~0x81FFFF)
+			     *   DDR    --> Only Domian 1 can access (0x80000000~0x81000000)
+			     * end.
+			     */
+		start-config = <
+			    RDC_MDA  RDC_MDA_SDMA3p DID1 0x0 0x0
+			    RDC_MDA  RDC_MDA_SDMA3b DID1 0x0 0x0
+			    RDC_MDA  RDC_MDA_SDMA3_SPBA2 DID1 0x0 0x0
+			    RDC_PDAP RDC_PDAP_SAI3  PDAP_D1_ACCESS 0x0 0x0
+			    RDC_PDAP RDC_PDAP_UART4 PDAP_D1_ACCESS 0x0 0x0
+			    RDC_PDAP RDC_PDAP_GPT1  PDAP_D1_ACCESS 0x0 0x0
+			    RDC_MEM_REGION 26 TCM_START TCM_END MEM_D1_ACCESS
+			    RDC_MEM_REGION 0 M4_EVK_DDR4_START M4_EVK_DDR4_END MEM_D1_ACCESS
+			    0x0      0x0            0x0  0x0 0x0
+			  >;
+			    /* rdc config when MCU stops
+			     * memory:
+			     *   TCM    --> domain 0/1 can access (0x7E0000~0x81FFFF)
+			     *   DDR    --> domain 0/1 can access (0x80000000~0x81000000)
+			     * end.
+			     */
+		stop-config = <
+			    RDC_MEM_REGION 26 TCM_START TCM_END MEM_D0D1_ACCESS
+			    RDC_MEM_REGION 0 M4_EVK_DDR4_START M4_EVK_DDR4_END MEM_D0D1_ACCESS
+			    0x0      0x0            0x0  0x0 0x0
+			  >;
+	};
+};
+
+&{/soc@0} {
+	u-boot,dm-pre-reloc;
+	u-boot,dm-spl;
+};
+
+&clk {
+	u-boot,dm-spl;
+	u-boot,dm-pre-reloc;
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-parents;
+	/delete-property/ assigned-clock-rates;
+};
+
+&cpu_pd_wait {
+	/delete-property/ compatible;
+};
+
+&osc_24m {
+	u-boot,dm-spl;
+	u-boot,dm-pre-reloc;
+};
+
+&aips1 {
+	u-boot,dm-spl;
+	u-boot,dm-pre-reloc;
+};
+
+&aips2 {
+	u-boot,dm-spl;
+};
+
+&aips3 {
+	u-boot,dm-spl;
+};
+
+&iomuxc {
+	u-boot,dm-spl;
+};
+
+&reg_usdhc2_vmmc {
+	u-boot,dm-spl;
+	u-boot,off-on-delay-us = <20000>;
+};
+
+&pinctrl_reg_usdhc2_vmmc {
+	u-boot,dm-spl;
+};
+
+&pinctrl_uart2 {
+	u-boot,dm-spl;
+};
+
+&pinctrl_usdhc2_gpio {
+	u-boot,dm-spl;
+};
+
+&pinctrl_usdhc2 {
+	u-boot,dm-spl;
+};
+
+&pinctrl_usdhc3 {
+	u-boot,dm-spl;
+};
+
+&gpio1 {
+	u-boot,dm-spl;
+};
+
+&gpio2 {
+	u-boot,dm-spl;
+};
+
+&gpio3 {
+	u-boot,dm-spl;
+};
+
+&gpio4 {
+	u-boot,dm-spl;
+};
+
+&gpio5 {
+	u-boot,dm-spl;
+};
+
+&uart2 {
+	u-boot,dm-spl;
+};
+
+&crypto {
+	u-boot,dm-spl;
+};
+
+&sec_jr0 {
+	u-boot,dm-spl;
+};
+
+&sec_jr1 {
+	u-boot,dm-spl;
+};
+
+&sec_jr2 {
+	u-boot,dm-spl;
+};
+
+&usdhc1 {
+	u-boot,dm-spl;
+	assigned-clocks = <&clk IMX8MN_CLK_USDHC1>;
+	assigned-clock-rates = <400000000>;
+	assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_400M>;
+};
+
+&usdhc2 {
+	u-boot,dm-spl;
+	sd-uhs-sdr104;
+	sd-uhs-ddr50;
+	assigned-clocks = <&clk IMX8MN_CLK_USDHC2>;
+	assigned-clock-rates = <400000000>;
+	assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_400M>;
+};
+
+&usdhc3 {
+	u-boot,dm-spl;
+	mmc-hs400-1_8v;
+	mmc-hs400-enhanced-strobe;
+	assigned-clocks = <&clk IMX8MN_CLK_USDHC3>;
+	assigned-clock-rates = <400000000>;
+	assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_400M>;
+};
+
+&wdog1 {
+	u-boot,dm-spl;
+};
+
+&binman {
+	 u-boot-spl-ddr {
+		filename = "u-boot-spl-ddr.bin";
+		pad-byte = <0xff>;
+		align-size = <4>;
+		align = <4>;
+
+		u-boot-spl {
+			align-end = <4>;
+		};
+
+		blob_1: blob-ext@1 {
+			filename = "lpddr4_pmu_train_1d_imem.bin";
+			size = <0x8000>;
+		};
+
+		blob_2: blob-ext@2 {
+			filename = "lpddr4_pmu_train_1d_dmem.bin";
+			size = <0x4000>;
+		};
+
+		blob_3: blob-ext@3 {
+			filename = "lpddr4_pmu_train_2d_imem.bin";
+			size = <0x8000>;
+		};
+
+		blob_4: blob-ext@4 {
+			filename = "lpddr4_pmu_train_2d_dmem.bin";
+			size = <0x4000>;
+		};
+	};
+
+
+	flash {
+		mkimage {
+			args = "-n spl/u-boot-spl.cfgout -T imx8mimage -e 0x912000";
+
+			blob {
+				filename = "u-boot-spl-ddr.bin";
+			};
+		};
+	};
+
+	itb {
+		filename = "u-boot.itb";
+
+		fit {
+			description = "Configuration to load ATF before U-Boot";
+			#address-cells = <1>;
+			fit,external-offset = <CONFIG_FIT_EXTERNAL_OFFSET>;
+
+			images {
+				uboot {
+					description = "U-Boot (64-bit)";
+					type = "standalone";
+					arch = "arm64";
+					compression = "none";
+					load = <CONFIG_SYS_TEXT_BASE>;
+
+					uboot_blob: blob-ext {
+						filename = "u-boot-nodtb.bin";
+					};
+				};
+
+				atf {
+					description = "ARM Trusted Firmware";
+					type = "firmware";
+					arch = "arm64";
+					compression = "none";
+					load = <0x960000>;
+					entry = <0x960000>;
+
+					atf_blob: blob-ext {
+						filename = "bl31.bin";
+					};
+				};
+
+				fdt {
+					description = "NAME";
+					type = "flat_dt";
+					compression = "none";
+
+					uboot_fdt_blob: blob-ext {
+						filename = "u-boot.dtb";
+					};
+				};
+			};
+
+			configurations {
+				default = "conf";
+
+				conf {
+					description = "NAME";
+					firmware = "uboot";
+					loadables = "atf";
+					fdt = "fdt";
+				};
+			};
+		};
+	};
+};
+
+&tmu {
+	u-boot,dm-pre-reloc;
+};
+
+&i2c1 {
+	u-boot,dm-spl;
+};
+
+&{/soc@0/bus@30800000/i2c@30a20000/pca9450@25} {
+	u-boot,dm-spl;
+};
+
+&{/soc@0/bus@30800000/i2c@30a20000/pca9450@25/regulators} {
+	u-boot,dm-spl;
+};
+
+&pinctrl_i2c1 {
+	u-boot,dm-spl;
+};
+
+&pinctrl_i2c1_gpio {
+	u-boot,dm-spl;
+};
+
+&pinctrl_pmic {
+	u-boot,dm-spl;
+};
+
+&fec1 {
+	phy-reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
+	phy-reset-duration = <15>;
+	phy-reset-post-delay = <100>;
+};
+
+&ethphy0 {
+	vddio0: vddio-regulator {
+		regulator-name = "VDDIO";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+	};
+};
+
+&lcdif {
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-parents;
+	/delete-property/ assigned-clock-rates;
+};
+
+&mipi_dsi {
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-parents;
+	/delete-property/ assigned-clock-rates;
+};

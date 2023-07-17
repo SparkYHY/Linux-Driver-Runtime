@@ -1,0 +1,12 @@
+#ifndef _MPL3115_DISPATCHER_H_
+#define _MPL3115_DISPATCHER_H_
+
+#define MAX_PARAM_BUF_SIZE	256
+
+#define MPL3115_DRIVER_ID	15
+
+enum mpl3115_func {
+	MPL3115_PROBE,
+};
+
+#endif

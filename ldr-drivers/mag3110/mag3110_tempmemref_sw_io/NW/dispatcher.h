@@ -1,0 +1,12 @@
+#ifndef _MAG3110_DISPATCHER_H_
+#define _MAG3110_DISPATCHER_H_
+
+#define MAX_PARAM_BUF_SIZE	256
+
+#define MAG3110_DRIVER_ID	3
+
+enum mag3110_func {
+	MAG3110_PROBE,
+};
+
+#endif

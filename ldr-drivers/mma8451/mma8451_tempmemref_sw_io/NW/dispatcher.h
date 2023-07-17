@@ -1,0 +1,13 @@
+#ifndef _MAX8451_DISPATCHER_H_
+#define _MAX8451_DISPATCHER_H_
+
+#define MAX_PARAM_BUF_SIZE	256
+
+#define MAX8451_DRIVER_ID	2
+
+enum max8451_func {
+	MAX8451_PROBE,
+	MAX8451_READ_DATA,
+};
+
+#endif

@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"ldr_pta.h": "c",
+		"dispatcher.h": "c"
+	}
+}
