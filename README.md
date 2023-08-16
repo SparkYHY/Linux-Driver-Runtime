@@ -1,5 +1,19 @@
-# Linux-Driver-Runtime
 # LDR: Secure and Efficient Linux Driver Runtime for Embedded TEE Systems
+
+Our paper has been accepted to appear in NDSS 2024.
+
+Author List: 
+
+ - Huaiyu Yan (Southeast University)
+ - Zhen Ling (Southeast University)
+ - Haobo Li (Southeast University)
+ - Lan Luo (Southeast University)
+ - Xinhui Shao (Southeast University)
+ - Kai Dong (Southeast University)
+ - Ping Jiang (Southeast University)
+ - Ming Yang (Southeast University)
+ - Junzhou Luo (Southeast University)
+ - Xinwen Fu (University of Massachusetts Lowell)
 
 This repository contains all source files to evaluate LDR, including
 
